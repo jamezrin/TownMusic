@@ -1,4 +1,4 @@
-package me.jaime29010.townmusic;
+package me.jaimemartz.townmusic;
 
 import com.palmergames.bukkit.towny.object.Town;
 import me.jaimemartz.faucet.ConfigUtil;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class Main extends JavaPlugin {
+public class TownMusic extends JavaPlugin {
     private Permission provider = null;
     private FileConfiguration config = null;
     private ConfigurationSection section = null;

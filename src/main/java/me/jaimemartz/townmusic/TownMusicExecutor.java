@@ -1,4 +1,4 @@
-package me.jaime29010.townmusic;
+package me.jaimemartz.townmusic;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
@@ -9,9 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TownMusicExecutor implements CommandExecutor {
-    private final Main main;
-    public TownMusicExecutor(Main main) {
-        this.main = main;
+    private final TownMusic plugin;
+    public TownMusicExecutor(TownMusic plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class TownMusicExecutor implements CommandExecutor {
                             Town town = TownyUtils.getTown(resident);
                             if (town != null && town.getMayor().equals(resident)) {
                                 String link = args[1];
-                                if (main.isValidLink(link)) {
-                                    main.setSong(town, link);
+                                if (plugin.isValidLink(link)) {
+                                    plugin.setSong(town, link);
                                     msgr.send(String.format("&aYou have set the song of your town %s to %s", town.getName(), link));
                                 } else {
                                     msgr.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
@@ -48,13 +48,13 @@ public class TownMusicExecutor implements CommandExecutor {
                             }
                             break;
                         } else if (args.length == 3) {
-                            if (main.hasPermission(player, "townmusic.admin")) {
+                            if (plugin.hasPermission(player, "townmusic.admin")) {
                                 String name = args[1];
                                 Town town = TownyUtils.getTown(name);
                                 if (town != null) {
                                     String link = args[2];
-                                    if (main.isValidLink(link)) {
-                                        main.setSong(town, link);
+                                    if (plugin.isValidLink(link)) {
+                                        plugin.setSong(town, link);
                                         msgr.send(String.format("&aYou have set the song of the town %s to %s", town.getName(), link));
                                     } else {
                                         msgr.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
@@ -74,8 +74,8 @@ public class TownMusicExecutor implements CommandExecutor {
                             Town town = TownyUtils.getTown(resident);
                             if (town != null) {
                                 if (town.getMayor().equals(resident)) {
-                                    if (main.hasSong(town)) {
-                                        main.removeSong(town);
+                                    if (plugin.hasSong(town)) {
+                                        plugin.removeSong(town);
                                         msgr.send("&aYou have removed the song of your town");
                                     } else {
                                         msgr.send("&Your town does not have a song");
@@ -88,12 +88,12 @@ public class TownMusicExecutor implements CommandExecutor {
                             }
                             break;
                         } else if (args.length == 2) {
-                            if (main.hasPermission(player, "townmusic.admin")) {
+                            if (plugin.hasPermission(player, "townmusic.admin")) {
                                 String name = args[1];
                                 Town town = TownyUtils.getTown(name);
                                 if (town != null) {
-                                    if (main.hasSong(town)) {
-                                        main.removeSong(town);
+                                    if (plugin.hasSong(town)) {
+                                        plugin.removeSong(town);
                                         msgr.send("&aYou have removed the song of your town");
                                     } else {
                                         msgr.send("&cThat town does not have a song");
@@ -108,8 +108,8 @@ public class TownMusicExecutor implements CommandExecutor {
                         }
                     }
                     case "reload": {
-                        if (main.hasPermission(player, "townmusic.admin")) {
-                            main.reloadPlugin();
+                        if (plugin.hasPermission(player, "townmusic.admin")) {
+                            plugin.reloadPlugin();
                             msgr.send("&aYou have successfully reloaded the plugin");
                         } else {
                             msgr.send("&cThis command can only be executed by a admin");

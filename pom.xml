@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.jaime29010</groupId>
+    <groupId>me.jaimemartz</groupId>
     <artifactId>townmusic</artifactId>
     <version>1.0.2</version>
     <build>
@@ -38,7 +38,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>src/townMusic/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>

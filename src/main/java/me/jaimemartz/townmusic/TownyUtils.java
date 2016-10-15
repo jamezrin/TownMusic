@@ -1,4 +1,4 @@
-package me.jaime29010.townmusic;
+package me.jaimemartz.townmusic;
 
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.*;
