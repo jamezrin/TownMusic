@@ -38,7 +38,7 @@
         </plugins>
         <resources>
             <resource>
-                <directory>src/townMusic/resources</directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
