@@ -1,5 +1,5 @@
 name: TownMusic
-townMusic: me.jaimemartz.townmusic.TownMusic
+main: me.jaimemartz.townmusic.TownMusic
 version: ${project.version}
 author: [jaime29010]
 depend: [Vault, Towny, JukeboxAPI]
