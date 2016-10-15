@@ -1,11 +1,8 @@
 package me.jaime29010.townmusic;
 
 import com.palmergames.bukkit.towny.object.Town;
-import me.jaime29010.townmusic.commands.TownMusicExecutor;
-import me.jaime29010.townmusic.listeners.PlayerChangePlotListener;
-import me.jaime29010.townmusic.listeners.PlayerJoinListener;
-import me.jaime29010.townmusic.listeners.PlayerQuitListener;
-import me.jaime29010.townmusic.utils.ConfigurationManager;
+import me.jaimemartz.faucet.ConfigUtil;
+import net.mcjukebox.plugin.bukkit.api.JukeboxAPI;
 import net.mcjukebox.plugin.bukkit.api.ResourceType;
 import net.mcjukebox.plugin.bukkit.api.models.Media;
 import net.milkbowl.vault.permission.Permission;
@@ -30,7 +27,7 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        config = ConfigurationManager.loadConfig("config.yml", this);
+        config = ConfigUtil.loadConfig("config.yml", this);
         section = config.getConfigurationSection("songs");
         for (String key : section.getKeys(false)) {
             songs.put(key, new Media(ResourceType.MUSIC, section.getString(key)));
@@ -47,9 +44,7 @@ public class Main extends JavaPlugin {
             provider = service.getProvider();
         }
 
-        getServer().getPluginManager().registerEvents(new PlayerChangePlotListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getCommand("townmusic").setExecutor(new TownMusicExecutor(this));
     }
 
@@ -59,7 +54,7 @@ public class Main extends JavaPlugin {
             Media media = entry.getValue();
             section.set(entry.getKey(), media.getURL());
         }
-        ConfigurationManager.saveConfig(config, "config.yml", this);
+        ConfigUtil.saveConfig(config, "config.yml", this);
     }
 
     public boolean isValidLink(String link) {
@@ -94,7 +89,7 @@ public class Main extends JavaPlugin {
     }
 
     public void reloadPlugin() {
-        config = ConfigurationManager.loadConfig("config.yml", this);
+        config = ConfigUtil.loadConfig("config.yml", this);
 
         String link = config.getString("default-song");
         if (isValidLink(link)) {
@@ -104,5 +99,15 @@ public class Main extends JavaPlugin {
 
     public boolean hasDefaultSong() {
         return defaultSong != null;
+    }
+
+    public void startSong(Player player, Town town) {
+        if (town != null && this.hasSong(town)) {
+            JukeboxAPI.play(player, this.getSong(town));
+        } else if (this.hasDefaultSong()) {
+            JukeboxAPI.play(player, this.getDefaultSong());
+        } else {
+            JukeboxAPI.stopMusic(player);
+        }
     }
 }

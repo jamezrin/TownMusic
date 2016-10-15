@@ -1,10 +1,8 @@
-package me.jaime29010.townmusic.commands;
+package me.jaime29010.townmusic;
 
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Town;
-import me.jaime29010.townmusic.Main;
-import me.jaime29010.townmusic.utils.Messager;
-import me.jaime29010.townmusic.utils.TownyUtils;
+import me.jaimemartz.faucet.Messager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,10 +17,10 @@ public class TownMusicExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
-            final Messager messager = new Messager(sender);
+            final Messager msgr = new Messager(sender);
             final Player player = (Player) sender;
             if (args.length == 0) {
-                messager.send(
+                msgr.send(
                         "&6.oOo.___________.[ &eGeneral TownMusic Help &6].___________.oOo.",
                         "  &3/townmusic &bset [link] &7: Set the song of your own town (&cOnly mayors&7)",
                         "  &3/townmusic &bclear &7: Clear the song of your own town (&cOnly mayors&7)",
@@ -41,12 +39,12 @@ public class TownMusicExecutor implements CommandExecutor {
                                 String link = args[1];
                                 if (main.isValidLink(link)) {
                                     main.setSong(town, link);
-                                    messager.send(String.format("&aYou have set the song of your town %s to %s", town.getName(), link));
+                                    msgr.send(String.format("&aYou have set the song of your town %s to %s", town.getName(), link));
                                 } else {
-                                    messager.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
+                                    msgr.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
                                 }
                             } else {
-                                messager.send("&cThis command can only be executed by a mayor");
+                                msgr.send("&cThis command can only be executed by a mayor");
                             }
                             break;
                         } else if (args.length == 3) {
@@ -57,15 +55,15 @@ public class TownMusicExecutor implements CommandExecutor {
                                     String link = args[2];
                                     if (main.isValidLink(link)) {
                                         main.setSong(town, link);
-                                        messager.send(String.format("&aYou have set the song of the town %s to %s", town.getName(), link));
+                                        msgr.send(String.format("&aYou have set the song of the town %s to %s", town.getName(), link));
                                     } else {
-                                        messager.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
+                                        msgr.send("&cThe link you provided is not a valid song", "&cMake sure it ends with .mp3");
                                     }
                                 } else {
-                                    messager.send(String.format("&cThere is no town called %s", name));
+                                    msgr.send(String.format("&cThere is no town called %s", name));
                                 }
                             } else {
-                                messager.send("&cThis command can only be executed by a admin");
+                                msgr.send("&cThis command can only be executed by a admin");
                             }
                             break;
                         }
@@ -78,15 +76,15 @@ public class TownMusicExecutor implements CommandExecutor {
                                 if (town.getMayor().equals(resident)) {
                                     if (main.hasSong(town)) {
                                         main.removeSong(town);
-                                        messager.send("&aYou have removed the song of your town");
+                                        msgr.send("&aYou have removed the song of your town");
                                     } else {
-                                        messager.send("&Your town does not have a song");
+                                        msgr.send("&Your town does not have a song");
                                     }
                                 } else {
-                                    messager.send("&cThis command can only be executed by a mayor");
+                                    msgr.send("&cThis command can only be executed by a mayor");
                                 }
                             } else {
-                                messager.send("&cYou are not in a town");
+                                msgr.send("&cYou are not in a town");
                             }
                             break;
                         } else if (args.length == 2) {
@@ -96,15 +94,15 @@ public class TownMusicExecutor implements CommandExecutor {
                                 if (town != null) {
                                     if (main.hasSong(town)) {
                                         main.removeSong(town);
-                                        messager.send("&aYou have removed the song of your town");
+                                        msgr.send("&aYou have removed the song of your town");
                                     } else {
-                                        messager.send("&cThat town does not have a song");
+                                        msgr.send("&cThat town does not have a song");
                                     }
                                 } else {
-                                    messager.send(String.format("&cThere is no town called %s", name));
+                                    msgr.send(String.format("&cThere is no town called %s", name));
                                 }
                             } else {
-                                messager.send("&cThis command can only be executed by a admin");
+                                msgr.send("&cThis command can only be executed by a admin");
                             }
                             break;
                         }
@@ -112,14 +110,14 @@ public class TownMusicExecutor implements CommandExecutor {
                     case "reload": {
                         if (main.hasPermission(player, "townmusic.admin")) {
                             main.reloadPlugin();
-                            messager.send("&aYou have successfully reloaded the plugin");
+                            msgr.send("&aYou have successfully reloaded the plugin");
                         } else {
-                            messager.send("&cThis command can only be executed by a admin");
+                            msgr.send("&cThis command can only be executed by a admin");
                         }
                         break;
                     }
                     default: {
-                        messager.send("&cYou have provided unvalid arguments for this command, for help type: /townmusic");
+                        msgr.send("&cYou have provided unvalid arguments for this command, for help type: /townmusic");
                     }
                 }
             }
