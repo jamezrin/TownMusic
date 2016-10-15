@@ -49,10 +49,6 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>znode</id>
-            <url>http://repo.zno.de/artifactory/repo/</url>
-        </repository>
     </repositories>
     <dependencies>
         <!--Spigot API-->
@@ -67,13 +63,6 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <!--Vault API-->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.5</version>
             <scope>provided</scope>
         </dependency>
         <!--Towny API-->

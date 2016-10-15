@@ -48,7 +48,7 @@ public class TownMusicExecutor implements CommandExecutor {
                             }
                             break;
                         } else if (args.length == 3) {
-                            if (plugin.hasPermission(player, "townmusic.admin")) {
+                            if (player.hasPermission("townmusic.admin")) {
                                 String name = args[1];
                                 Town town = TownyUtils.getTown(name);
                                 if (town != null) {
@@ -88,7 +88,7 @@ public class TownMusicExecutor implements CommandExecutor {
                             }
                             break;
                         } else if (args.length == 2) {
-                            if (plugin.hasPermission(player, "townmusic.admin")) {
+                            if (player.hasPermission("townmusic.admin")) {
                                 String name = args[1];
                                 Town town = TownyUtils.getTown(name);
                                 if (town != null) {
@@ -108,7 +108,7 @@ public class TownMusicExecutor implements CommandExecutor {
                         }
                     }
                     case "reload": {
-                        if (plugin.hasPermission(player, "townmusic.admin")) {
+                        if (player.hasPermission("townmusic.admin")) {
                             plugin.reloadPlugin();
                             msgr.send("&aYou have successfully reloaded the plugin");
                         } else {

@@ -5,12 +5,9 @@ import me.jaimemartz.faucet.ConfigUtil;
 import net.mcjukebox.plugin.bukkit.api.JukeboxAPI;
 import net.mcjukebox.plugin.bukkit.api.ResourceType;
 import net.mcjukebox.plugin.bukkit.api.models.Media;
-import net.milkbowl.vault.permission.Permission;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
@@ -19,7 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class TownMusic extends JavaPlugin {
-    private Permission provider = null;
     private FileConfiguration config = null;
     private ConfigurationSection section = null;
     private Media defaultSong = null;
@@ -36,12 +32,6 @@ public class TownMusic extends JavaPlugin {
         String link = config.getString("default-song");
         if (isValidLink(link)) {
             defaultSong = new Media(ResourceType.MUSIC, link);
-        }
-
-        ServicesManager manager = getServer().getServicesManager();
-        RegisteredServiceProvider<Permission> service = manager.getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (service != null) {
-            provider = service.getProvider();
         }
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -82,10 +72,6 @@ public class TownMusic extends JavaPlugin {
 
     public Media getDefaultSong() {
         return defaultSong;
-    }
-
-    public boolean hasPermission(Player player, String permission) {
-        return provider.has(player, permission);
     }
 
     public void reloadPlugin() {
