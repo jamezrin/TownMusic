@@ -1,0 +1,9 @@
+name: TownMusic
+main: me.jaime29010.townmusic.Main
+version: ${project.version}
+author: [jaime29010]
+depend: [Vault, Towny, JukeboxAPI]
+commands:
+  townmusic:
+    description: Command for setting and clearing a town's song
+    usage: /townmusic
