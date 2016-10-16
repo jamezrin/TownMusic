@@ -1,38 +1,24 @@
 package me.jaimemartz.townmusic;
 
 import com.palmergames.bukkit.towny.object.Town;
-import me.jaimemartz.faucet.ConfigUtil;
+import me.jaimemartz.faucet.ConfigFactory;
 import net.mcjukebox.plugin.bukkit.api.JukeboxAPI;
-import net.mcjukebox.plugin.bukkit.api.ResourceType;
-import net.mcjukebox.plugin.bukkit.api.models.Media;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
 public class TownMusic extends JavaPlugin {
-    private FileConfiguration config = null;
-    private ConfigurationSection section = null;
-    private Media defaultSong = null;
-    private final Map<String, Media> songs = Collections.synchronizedMap(new HashMap<String, Media>());
+    private ConfigFactory factory;
+    private TownMedia media;
 
     @Override
     public void onEnable() {
-        config = ConfigUtil.loadConfig("config.yml", this);
-        section = config.getConfigurationSection("songs");
-        for (String key : section.getKeys(false)) {
-            songs.put(key, new Media(ResourceType.MUSIC, section.getString(key)));
+        if (factory == null) {
+            factory = new ConfigFactory(this);
+            factory.register(0, "config.yml");
+            factory.submit(ConfigEntries.class);
         }
 
-        String link = config.getString("default-song");
-        if (isValidLink(link)) {
-            defaultSong = new Media(ResourceType.MUSIC, link);
-        }
+        loadPlugin();
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
         getCommand("townmusic").setExecutor(new TownMusicExecutor(this));
@@ -40,11 +26,12 @@ public class TownMusic extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        for (Entry<String, Media> entry : songs.entrySet()) {
-            Media media = entry.getValue();
-            section.set(entry.getKey(), media.getURL());
-        }
-        ConfigUtil.saveConfig(config, "config.yml", this);
+        factory.save(0);
+    }
+
+    public void loadPlugin() {
+        factory.load(0, false);
+        media = ConfigEntries.TOWN_MEDIA.get();
     }
 
     public boolean isValidLink(String link) {
@@ -54,46 +41,19 @@ public class TownMusic extends JavaPlugin {
         return link.matches("(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*\\.(?:mp3))(?:\\?([^#]*))?(?:#(.*))?");
     }
 
-    public boolean hasSong(Town town) {
-        return songs.containsKey(town.getName());
-    }
-
-    public Media getSong(Town town) {
-        return songs.get(town.getName());
-    }
-
-    public void setSong(Town town, String link) {
-        songs.put(town.getName(), new Media(ResourceType.MUSIC, link));
-    }
-
-    public void removeSong(Town town) {
-        songs.remove(town.getName());
-    }
-
-    public Media getDefaultSong() {
-        return defaultSong;
-    }
-
-    public void reloadPlugin() {
-        config = ConfigUtil.loadConfig("config.yml", this);
-
-        String link = config.getString("default-song");
-        if (isValidLink(link)) {
-            defaultSong = new Media(ResourceType.MUSIC, link);
-        }
-    }
-
-    public boolean hasDefaultSong() {
-        return defaultSong != null;
-    }
-
-    public void startSong(Player player, Town town) {
-        if (town != null && this.hasSong(town)) {
-            JukeboxAPI.play(player, this.getSong(town));
-        } else if (this.hasDefaultSong()) {
-            JukeboxAPI.play(player, this.getDefaultSong());
+    public void playMusic(Player player, Town town) {
+        if (town != null) {
+            if (media.hasSong(town)) {
+                JukeboxAPI.play(player, media.getSong(town));
+            }
+        } else if (media.hasDefaultSong()) {
+            JukeboxAPI.play(player, media.getDefaultSong());
         } else {
             JukeboxAPI.stopMusic(player);
         }
+    }
+
+    public TownMedia getMedia() {
+        return media;
     }
 }

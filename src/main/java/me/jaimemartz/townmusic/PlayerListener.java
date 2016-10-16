@@ -5,10 +5,10 @@ import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownBlock;
 import com.palmergames.bukkit.towny.object.TownyUniverse;
 import net.mcjukebox.plugin.bukkit.api.JukeboxAPI;
+import net.mcjukebox.plugin.bukkit.events.ClientConnectEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
@@ -21,20 +21,21 @@ public class PlayerListener implements Listener {
     public void on(PlayerChangePlotEvent event) {
         Player player = event.getPlayer();
         Town town = TownyUtils.getTown(event.getTo());
-        if (town == null) return;
 
         if (TownyUtils.townEquals(TownyUtils.getTown(event.getFrom()), town)) return;
-        plugin.startSong(player, town);
+        plugin.playMusic(player, town);
     }
 
     @EventHandler
-    public void on(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+    public void on(ClientConnectEvent event) {
+        Player player = plugin.getServer().getPlayer(event.getUsername());
+        if (player == null) return;
+
         TownBlock block = TownyUniverse.getTownBlock(player.getLocation());
         if (block == null) return;
 
         Town town = TownyUtils.getTown(block);
-        plugin.startSong(player, town);
+        plugin.playMusic(player, town);
     }
 
     @EventHandler
