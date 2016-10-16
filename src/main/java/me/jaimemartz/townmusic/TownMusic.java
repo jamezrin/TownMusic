@@ -43,11 +43,11 @@ public class TownMusic extends JavaPlugin {
 
     public void playMusic(Player player, Town town) {
         if (town != null) {
-            if (media.hasSong(town)) {
-                JukeboxAPI.play(player, media.getSong(town));
+            if (media.hasSong(town.getName())) {
+                JukeboxAPI.play(player, media.getSong(town.getName()));
             }
-        } else if (media.hasDefaultSong()) {
-            JukeboxAPI.play(player, media.getDefaultSong());
+        } else if (media.hasSong(null)) {
+            JukeboxAPI.play(player, media.getSong(null));
         } else {
             JukeboxAPI.stopMusic(player);
         }
